@@ -1,5 +1,7 @@
+//Example of how this library could be used
+
 import { Hex, hex_directions, hex_direction } from './hexs6';
-import * as emoji from 'node-emoji';
+//import * as emoji from 'node-emoji';
 import {
     create_hex_cells,
     get_hex,
