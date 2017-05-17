@@ -45,8 +45,7 @@ describe("Hex Rotation", () => {
     let center = Hex(0,0,0);
 
     describe("at radius 3", () => {
-        //Amit guide: q=x,r=z,s=y
-        let rotation_target = Hex(2,-4,2); //Q, R, S
+        let rotation_target = Hex(2,-4,2); //Q=X, R=Z, S=Y
         let rotated_right = Hex(4,-2,-2);
         let rotated_left = Hex(-2,-2, 4);
 
@@ -60,8 +59,7 @@ describe("Hex Rotation", () => {
     });
 
     describe("at radius 5", () => {
-        //Amit guide: q=x,r=z,s=y
-        let rotation_target = Hex(-5,1,4); //Q, R, S
+        let rotation_target = Hex(-5,1,4); //Q=X, R=Z, S=Y
         let rotated_right = Hex(-1,-4,5);
         let rotated_left = Hex(-4,5,-1);
 
