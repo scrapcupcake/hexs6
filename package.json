@@ -1,0 +1,35 @@
+{
+    "name": "typescript-jasmine-istanbul-boilerplate",
+    "version": "1.0.0",
+    "description": "An example node project to produce coverage of TypeScript sources using Jasmine.",
+    "scripts": {
+        "test": "ts-node --lib dom,es2015 node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json",
+        "test:coverage": "ts-node node_modules/istanbul/lib/cli.js cover -e .ts  -x \"*.d.ts\" -x \"*.spec.ts\" node_modules/jasmine/bin/jasmine.js -- JASMINE_CONFIG_PATH=jasmine.json"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Izhaki/Typescript-Jasmine-Istanbul-Boilerplate.git"
+    },
+    "keywords": [
+        "typescript",
+        "jasmine",
+        "istanbul",
+        "sourcemaps",
+        "node",
+        "npm scripts",
+        "tsc"
+    ],
+    "author": "Izhaki",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/jasmine": "^2.5.35",
+        "istanbul": "^1.1.0-alpha.1",
+        "jasmine": "^2.5.2",
+        "ts-node": "~1.6.0",
+        "typescript": "^2.0.3"
+    },
+    "bugs": {
+        "url": "https://github.com/Izhaki/Typescript-Jasmine-Istanbul-Boilerplate/issues"
+    },
+    "homepage": "https://github.com/Izhaki/Typescript-Jasmine-Istanbul-Boilerplate#readme"
+}
