@@ -44,6 +44,17 @@ describe("Hex Arithmetic", () => {
 describe("Hex Rotation", () => { 
     let center = Hex(0,0,0);
 
+    describe("back and forth results in the same location", ()=>{
+        it("at 2,-3, 1", ()=>{
+            let rot = Hex(2,-3,1);
+            expect(rot).toEqual(hex_rotate_right(hex_rotate_left(rot)));
+        });
+        it("at -4,5,-1", ()=>{
+            let rot = Hex(-4,5,-1);
+            expect(rot).toEqual(hex_rotate_right(hex_rotate_left(rot)));
+        });    
+    });
+
     describe("at radius 3", () => {
         let rotation_target = Hex(2,-4,2); //Q=X, R=Z, S=Y
         let rotated_right = Hex(4,-2,-2);

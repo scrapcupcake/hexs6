@@ -103,18 +103,15 @@ export function hex_direction(direction, horizontal = true) {
 }
 
 
-//q=x,r=z,s=y
-//rotateLeft (-s, -r, -q)
 export function hex_rotate_left(rotation_origin, center=Hex(0,0,0)){ 
     let vector = hex_subtract(rotation_origin, center);
-    let rotated = Hex(-vector.s, -vector.r, -vector.q);
+    let rotated = Hex(-vector.s, -vector.q, -vector.r);
     return hex_add(rotated, center);
 }
 
-//rotateRight() (-r, -q, -s)
 export function hex_rotate_right(rotation_origin, center=Hex(0,0,0)){
     let vector = hex_subtract(rotation_origin, center);
-    let rotated = Hex(-vector.r, -vector.q, -vector.s);
+    let rotated = Hex(-vector.r, -vector.s, -vector.q);
     return hex_add(rotated, center);
 }
 
