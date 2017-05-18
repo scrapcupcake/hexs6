@@ -10,15 +10,13 @@
         "noImplicitAny": false,
         "typeRoots": [
             "node_modules/@types"
-        ],
-        "types": [
-            "jasmine"
         ]
     },
     "include": [
         "src/**/*.ts",
         "node_modules/@types"
     ],
+    "exclude": [],
     "atom": {
         "rewriteTsconfig": false
     }

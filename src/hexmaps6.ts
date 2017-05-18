@@ -1,4 +1,4 @@
-import { Hex, hex_neighbors, hex_add, hex_rotate_right, hex_subtract, hex_distance } from './hexs6';
+import { Hex, hex_neighbors, hex_add, hex_rotate_right, hex_subtract, hex_distance, hex_stringify } from './hexs6';
 
 export function string_hash_code(string){
 	var hash = 0;
@@ -11,8 +11,10 @@ export function string_hash_code(string){
 	return hash;
 }
 
+
+
 export function hex_hash(hex){
-    return string_hash_code(`q:${hex.q}|r:${hex.r}|s:${hex.s}`);
+    return string_hash_code(hex_stringify(hex));
 }
 
 export function store_hex(hex,map){
@@ -63,14 +65,19 @@ export function wraparound_mirror_centers(radius,origin=Hex(0,0,0)){
 
 //Busted do not use
 export function wraparound_bounds(position,radius,centers){
-    for(let offset in centers){
-        console.log(position, radius, offset);
-        if(hex_distance(position, offset) < radius){
+    console.log("Running with Center on POS:",centers, position);
+    console.log("Wtf are you radius?", radius);
+    for(let offset of centers){
+        let distance = hex_distance(position, offset);
+        let check = distance <= radius;
+        console.log(`For offset, distance is ${distance} hexes`,position,offset);
+        if(check){
             return hex_subtract(position,  offset);
-        }else{
-            return position;
         }
     }
+    console.log("\nUnable to find any center we're less than a radius away from?!\n");
+    return undefined;
+
 }
 
 export function hexmap_wraparound_neighbors(hex,map, mirrors){

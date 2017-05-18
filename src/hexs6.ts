@@ -25,6 +25,14 @@ export function Hex(q, r, s) {
     return { q, r, s };
 }
 
+/**
+ * Outputs the hex in a sensible, consistent string format. Useful for logging and hashing.
+ * @param hex 
+ */
+export function hex_stringify(hex){
+    return `q:${hex.q}|r:${hex.r}|s:${hex.s}`;
+}
+
 
 /**
  * Named Generator for an Axial coordinate, just another name for Point at the end of the day, but self-documenting code, yo
@@ -77,14 +85,18 @@ export function hex_scale(a, k) {
 
 
 export const hex_directions = [Hex(1, 0, -1), Hex(1, -1, 0), Hex(0, -1, 1), Hex(-1, 0, 1), Hex(-1, 1, 0), Hex(0, 1, -1)];
-export const hex_direction_names_horizontal = ["East", "NorthEast", "NorthWest", "West", "SouthWest", "SouthEast"];
-export const hex_direction_names_vertical = ["North", "NorthWest", "SouthWest", "South", "SouthEast", "NorthEast"];
+export const hex_direction_names_horizontal = ["SouthEast",   "NorthEast",   "North",   "NorthWest",        "SouthWest",   "South"  ];
+const normalized_horizontal_names = hex_direction_names_horizontal.map((d) => d.toLowerCase());
+export const hex_direction_names_vertical = ["East",       "SouthEast",    "SouthWest",    "West",     "NorthWest",   "NorthEast"  ];
+const normalized_vertical_names = hex_direction_names_horizontal.map((d) => d.toLowerCase());
+
 /**
  * Resolve hex directions consistently, either by integer index or name string.
  * Names default to Horizontal aka Pointy Top orientation
  * Index Order: [Hex(1, 0, -1), Hex(1, -1, 0), Hex(0, -1, 1), Hex(-1, 0, 1), Hex(-1, 1, 0), Hex(0, 1, -1)]
- * Horizontal:  ["East",        "NorthEast",   "NorthWest",   "West",        "SouthWest",   "SouthEast"  ]
- * Vertical:    ["North",       "NorthWest",    "SouthWest",    "South",     "SouthEast",   "NorthEast"  ]
+ * Horizontal:  ["SouthEast",   "NorthEast",   "North",   "NorthWest",        "SouthWest",   "South"  ]
+ * Vertical:    ["East",       "SouthEast",    "SouthWest",    "West",     "NorthWest",   "NorthEast"  ]
+ * TODO: Case insensitivity
  * @param direction String or Index
  * @param horizontal Boolean, false uses vertical names
  */
@@ -92,9 +104,9 @@ export function hex_direction(direction, horizontal = true) {
     if (typeof(direction) === typeof("string")) {
         let index;
         if (horizontal) {
-            index = hex_direction_names_horizontal.indexOf(direction);
+            index = normalized_horizontal_names.indexOf(direction.toLowerCase());
         } else {
-            index = hex_direction_names_vertical.indexOf(direction);
+            index = normalized_vertical_names.indexOf(direction.toLowerCase());
         }
         return index > -1 ? hex_directions[index] : undefined;
     }

@@ -23,7 +23,11 @@ import {
     qoffset_from_cube,
     qoffset_to_cube,
     roffset_from_cube,
-    roffset_to_cube
+    roffset_to_cube,
+    hex_directions,
+    hex_stringify,
+    hex_direction_names_horizontal,
+    hex_direction_names_vertical
 } from './hexs6';
 
 /**
@@ -56,7 +60,7 @@ describe("Hex Rotation", () => {
     });
 
     describe("at radius 3", () => {
-        let rotation_target = Hex(2,-4,2); //Q=X, R=Z, S=Y
+        let rotation_target = Hex(2,-4,2);
         let rotated_right = Hex(4,-2,-2);
         let rotated_left = Hex(-2,-2, 4);
 
@@ -70,7 +74,7 @@ describe("Hex Rotation", () => {
     });
 
     describe("at radius 5", () => {
-        let rotation_target = Hex(-5,1,4); //Q=X, R=Z, S=Y
+        let rotation_target = Hex(-5,1,4);
         let rotated_right = Hex(-1,-4,5);
         let rotated_left = Hex(-4,5,-1);
 
@@ -85,18 +89,28 @@ describe("Hex Rotation", () => {
 });
 
 describe("Hex Directions", () => {
-    it("should return in predictable order, starting at index 0 = Hex(1, 0, -1) and rotating anti-clockwise to Hex(0, 1, -1)", () => {
-        expect(Hex(0, -1, 1)).toEqual(hex_direction(2));
-        expect(Hex(0, 1, -1)).toEqual(hex_direction(5));
-    });
-    it("should return index 0 = East for Horizontal orientation", () => {
-        expect(Hex(0, -1, 1)).toEqual(hex_direction("NorthWest"));
-        expect(Hex(0, 1, -1)).toEqual(hex_direction("SouthEast"));
-    });
-    it("should return index 0 = North for Vertical orientation", () => {
-        expect(Hex(0, -1, 1)).toEqual(hex_direction("SouthWest", false));
-        expect(Hex(0, 1, -1)).toEqual(hex_direction("NorthEast", false));
-    });
+    let prev_hex = hex_directions[5];
+    for(let i=0; i<5; i++){
+        let current_hex = hex_directions[i];
+        let next_hex = i==5? hex_directions[0] : hex_direction[i+1];
+
+        it(`should be rotationally correct for ${hex_stringify(current_hex)}`, ()=> {
+            expect(current_hex).toEqual(hex_rotate_right(next_hex));
+            expect(current_hex).toEqual(hex_rotate_left(prev_hex));
+        });
+
+        let horizontal_name = hex_direction_names_horizontal[i];
+        it(`should match the vertical alignment ${horizontal_name}`, () => {
+            expect(hex_direction(horizontal_name)).toEqual(current_hex);
+        });
+
+        let vertical_name = hex_direction_names_vertical[i];
+        it(`should match the vertical alignment ${vertical_name}`, () => {
+            expect(hex_direction(vertical_name)).toEqual(current_hex);
+        });
+
+        prev_hex=current_hex;
+    }
 });
 
 describe("Hex Neighbors", () => {

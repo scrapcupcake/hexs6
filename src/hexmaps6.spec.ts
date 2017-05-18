@@ -1,5 +1,14 @@
-import { Hex, hex_add, hex_rotate_left, HexAxis, hex_rotate_right } from './hexs6';
-import { create_hex_cells, wraparound_mirror_centers } from "./hexmaps6";
+import {
+    Hex,
+    hex_add,
+    hex_direction,
+    hex_directions,
+    hex_distance,
+    hex_rotate_left,
+    hex_rotate_right,
+    HexAxis
+} from './hexs6';
+import { create_hex_cells, hexmap_wraparound_neighbors, wraparound_mirror_centers, wraparound_bounds } from './hexmaps6';
 
 describe("Hexmap", () => {
 
@@ -17,20 +26,51 @@ describe("Hexmap", () => {
     let fourthMirrorCenter = hex_rotate_right(thirdMirrorCenter);
     let fifthMirrorCenter = hex_rotate_right(fourthMirrorCenter);
     let sixthMirrorCenter = hex_rotate_left(firstMirrorCenter);
-
-    describe("should rotate correctly", () => {
-        it("should be the same rotating either way", () => {
-            expect(sixthMirrorCenter).toEqual(hex_rotate_right(fifthMirrorCenter));
-        })
-    })
-
-    
+    let expectedMirrorList = 
+    [centerHex,
+    firstMirrorCenter,secondMirrorCenter,thirdMirrorCenter,
+    fourthMirrorCenter,fifthMirrorCenter,sixthMirrorCenter];
 
     describe("Mirroring", () => {
+        let wraparound_mirrors = wraparound_mirror_centers(mapRadius);
         it("should provide the correct list of mirrors", () => {
-            expect(wraparound_mirror_centers(mapRadius)).toEqual([
-                centerHex,firstMirrorCenter,secondMirrorCenter,thirdMirrorCenter,fourthMirrorCenter,fifthMirrorCenter,sixthMirrorCenter
-                ]);
+            expect(wraparound_mirrors).toEqual(expectedMirrorList);
+        });
+        describe("should have opposite mirrors that add up to the center point", ()  => {
+            it("for the first and fourth mirror center", () => {
+                expect(hex_add(wraparound_mirrors[1],wraparound_mirrors[4])).toEqual(centerHex);
+            });
+            it("for the second and fifth mirror center", () => {
+                expect(hex_add(wraparound_mirrors[2],wraparound_mirrors[5])).toEqual(centerHex);
+            });
+            it("for the third and sixth mirror center", () => {
+                expect(hex_add(wraparound_mirrors[3],wraparound_mirrors[6])).toEqual(centerHex);
+            });
+        });
+
+        describe("for a radius 1 map", () => {
+            it("should return you to the bottom left when you walk off the top right", () => {
+                let topHex = Hex(0,-1,1);
+                let bottomHex = Hex(0,1,-1);
+                let rotTestHex = hex_rotate_left(hex_rotate_left(hex_rotate_left(topHex)));
+                expect(bottomHex).toEqual(rotTestHex);
+
+                let topTopHex = hex_add(topHex,hex_direction("NorthEast"));
+                let walkedTopHex = hex_add(hex_add(topHex,hex_direction("SouthWest")),hex_direction("SouthWest"));
+
+                expect(walkedTopHex).toEqual(bottomHex);
+                
+                let wrapped = wraparound_bounds(topTopHex,1, wraparound_mirror_centers(1));
+                
+
+                console.log("Wat\n", topHex, bottomHex, topTopHex, wrapped, "\n");
+                console.log("Distance Wat\n",hex_distance(centerHex, topTopHex),hex_distance(centerHex, topHex),"\n");
+                expect(wrapped).toEqual(bottomHex);
+
+            });
+            it("should return you to the left when you walk off the right", () => {
+
+            });
         });
     });
 });
