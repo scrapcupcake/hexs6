@@ -65,12 +65,12 @@ export function wraparound_mirror_centers(radius,origin=Hex(0,0,0)){
 
 //Busted do not use
 export function wraparound_bounds(position,radius,centers){
-    console.log("Running with Center on POS:",centers, position);
-    console.log("Wtf are you radius?", radius);
+    //console.log("Running with Center on POS:",centers, position);
+    //console.log("Wtf are you radius?", radius);
     for(let offset of centers){
         let distance = hex_distance(position, offset);
         let check = distance <= radius;
-        console.log(`For offset, distance is ${distance} hexes`,position,offset);
+        //console.log(`For offset, distance is ${distance} hexes`,position,offset);
         if(check){
             return hex_subtract(position,  offset);
         }

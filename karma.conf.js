@@ -28,6 +28,7 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             'src/**/*.ts',
+            'src/**/*.js',
             'src/**/*.[Ss]pec.js',
             'src/**/*.[Ss]pec.ts'
         ],
@@ -40,6 +41,7 @@ module.exports = function(config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
+            "src/**/*.js": ["karma-typescript"],
             "src/**/*.ts": ["karma-typescript"]
         },
 
@@ -77,6 +79,6 @@ module.exports = function(config) {
 
         // Concurrency level
         // how many browser should be started simultaneous
-        concurrency: Infinity
+        concurrency: 1
     })
 }

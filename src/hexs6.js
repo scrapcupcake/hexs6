@@ -29,7 +29,7 @@ export function Hex(q, r, s) {
  * Outputs the hex in a sensible, consistent string format. Useful for logging and hashing.
  * @param hex 
  */
-export function hex_stringify(hex){
+export function hex_stringify(hex) {
     return `q:${hex.q}|r:${hex.r}|s:${hex.s}`;
 }
 
@@ -39,20 +39,20 @@ export function hex_stringify(hex){
  * @param x 
  * @param z 
  */
-export function HexAxis(x,z) {
-    return {x,z};
+export function HexAxis(x, z) {
+    return { x, z };
 }
 
-export function cube_to_axial(cube){
+export function cube_to_axial(cube) {
     let q = cube.x
     let r = cube.z
     return HexAxis(q, r)
 }
 
-export function axial_to_cube(hex){
+export function axial_to_cube(hex) {
     let x = hex.q
     let z = hex.r
-    let y = -x-z
+    let y = -x - z
     return Hex(x, y, z)
 }
 
@@ -84,18 +84,18 @@ export function hex_scale(a, k) {
 }
 
 
-export const hex_directions = [Hex(1, 0, -1), Hex(1, -1, 0), Hex(0, -1, 1), Hex(-1, 0, 1), Hex(-1, 1, 0), Hex(0, 1, -1)];
-export const hex_direction_names_horizontal = ["SouthEast",   "NorthEast",   "North",   "NorthWest",        "SouthWest",   "South"  ];
+export const hex_directions = [Hex(1, 0, -1), Hex(0, 1, -1), Hex(-1, 1, 0), Hex(-1, 0, 1), Hex(0, -1, 1), Hex(1, -1, 0)];
+export const hex_direction_names_horizontal = ["East", "SouthEast", "SouthWest", "West", "NorthWest", "NorthEast"];
 const normalized_horizontal_names = hex_direction_names_horizontal.map((d) => d.toLowerCase());
-export const hex_direction_names_vertical = ["East",       "SouthEast",    "SouthWest",    "West",     "NorthWest",   "NorthEast"  ];
-const normalized_vertical_names = hex_direction_names_horizontal.map((d) => d.toLowerCase());
+export const hex_direction_names_vertical = ["SouthEast", "South", "SouthWest", "NorthWest", "North", "NorthEast"];
+const normalized_vertical_names = hex_direction_names_vertical.map((d) => d.toLowerCase());
 
 /**
  * Resolve hex directions consistently, either by integer index or name string.
  * Names default to Horizontal aka Pointy Top orientation
- * Index Order: [Hex(1, 0, -1), Hex(1, -1, 0), Hex(0, -1, 1), Hex(-1, 0, 1), Hex(-1, 1, 0), Hex(0, 1, -1)]
- * Horizontal:  ["SouthEast",   "NorthEast",   "North",   "NorthWest",        "SouthWest",   "South"  ]
- * Vertical:    ["East",       "SouthEast",    "SouthWest",    "West",     "NorthWest",   "NorthEast"  ]
+ * Index Order: [Hex(1, 0, -1), Hex(0, 1, -1), Hex(-1, 1, 0), Hex(-1,0,1),Hex(0,-1,1),Hex(1,-1,-0)];
+ * Horizontal:  ["East",       "SouthEast",    "SouthWest",   "West",     "NorthWest",   "NorthEast"  ]
+ * Vertical:    ["SouthEast",  "NorthEast",   "North",   "NorthWest",        "SouthWest",   "South"  ]
  * TODO: Case insensitivity
  * @param direction String or Index
  * @param horizontal Boolean, false uses vertical names
@@ -114,16 +114,18 @@ export function hex_direction(direction, horizontal = true) {
     return hex_directions[direction];
 }
 
-
-export function hex_rotate_left(rotation_origin, center=Hex(0,0,0)){ 
+/*       [ x=q,  y=r,  z=s]
+to        [-y=r, -z=s, -x=q]
+ */
+export function hex_rotate_left(rotation_origin, center = Hex(0, 0, 0)) {
     let vector = hex_subtract(rotation_origin, center);
-    let rotated = Hex(-vector.s, -vector.q, -vector.r);
+    let rotated = Hex(-vector.s * 1, -vector.q * 1, -vector.r * 1);
     return hex_add(rotated, center);
 }
 
-export function hex_rotate_right(rotation_origin, center=Hex(0,0,0)){
+export function hex_rotate_right(rotation_origin, center = Hex(0, 0, 0)) {
     let vector = hex_subtract(rotation_origin, center);
-    let rotated = Hex(-vector.r, -vector.s, -vector.q);
+    let rotated = Hex(-vector.r * 1, -vector.s * 1, -vector.q * 1);
     return hex_add(rotated, center);
 }
 
@@ -140,8 +142,8 @@ export function hex_neighbor(hex, direction) {
  * TODO: Larger than 1 cycle //TODO: Brain fart?! Yeah, this doesn't touch an actual map. Dur. Brain needs retool.
  * @param hex center hex
  */
-export function hex_neighbors(hex){
-    return hex_directions.map((direction) => {return hex_add(hex,direction);});
+export function hex_neighbors(hex) {
+    return hex_directions.map((direction) => { return hex_add(hex, direction); });
 }
 
 
@@ -173,8 +175,8 @@ export function hex_round(h) {
     } else {
         s = -q - r;
     }
-    return Hex(q + +0, r+ +0, s+ +0); //BUGFIX: ES6 negative 0 was causing tests to fail, could cause weird bugs for someone someday?
-                                      //This also fixed the order issues I was seeing, so no sort needed? -- HT
+    return Hex(q + +0, r + +0, s + +0); //BUGFIX: ES6 negative 0 was causing tests to fail, could cause weird bugs for someone someday?
+    //This also fixed the order issues I was seeing, so no sort needed? -- HT
 }
 
 export function hex_lerp(a, b, t) {

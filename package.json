@@ -1,34 +1,38 @@
 {
-  "name": "hexs6",
-  "version": "0.0.1",
-  "description": "# Hexs6 A hex maths library, inspired by [Red Blob Game's excellent articles](http://www.redblobgames.com/grids/hexagons/). Written for use with ES6 and Typescript, everything has been kept functional.",
-  "scripts": {
-    "test": "ts-node --lib dom,es2015 node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/scrapcupcake/hexs6.git"
-  },
-  "keywords": [
-    "Hex",
-    "Hexagon"
-  ],
-  "author": "Hunnie Tana",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/jasmine": "^2.5.47",
-    "jasmine": "^2.5.2",
-    "jasmine-core": "^2.6.2",
-    "karma": "^1.7.0",
-    "karma-chrome-launcher": "^2.1.1",
-    "karma-jasmine": "^1.1.0",
-    "karma-jasmine-html-reporter": "^0.2.2",
-    "karma-typescript": "^3.0.2",
-    "ts-node": "~1.6.0",
-    "typescript": "^2.3.2"
-  },
-  "bugs": {
-    "url": "https://github.com/scrapcupcake/hexs6/issues"
-  },
-  "homepage": "https://github.com/scrapcupcake/hexs6/"
+    "name": "hexs6",
+    "version": "0.0.5",
+    "description": "# Hexs6 A hex maths library, inspired by [Red Blob Game's excellent articles](http://www.redblobgames.com/grids/hexagons/). Written for use with ES6 and Typescript, everything has been kept functional.",
+    "scripts": {
+        "test": "ts-node --lib dom,es2015 node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/scrapcupcake/hexs6.git"
+    },
+    "keywords": [
+        "Hex",
+        "Hexagon"
+    ],
+    "author": "Hunnie Tana",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/jasmine": "^2.5.47",
+        "babel-polyfill": "^6.23.0",
+        "babel-preset-env": "^1.5.1",
+        "babel-preset-es2015": "^6.24.1",
+        "jasmine": "^2.5.2",
+        "jasmine-core": "^2.6.2",
+        "karma": "^1.7.0",
+        "karma-babel-preprocessor": "^6.0.1",
+        "karma-chrome-launcher": "^2.1.1",
+        "karma-jasmine": "^1.1.0",
+        "karma-jasmine-html-reporter": "^0.2.2",
+        "karma-typescript": "^3.0.2",
+        "ts-node": "~1.6.0",
+        "typescript": "^2.3.2"
+    },
+    "bugs": {
+        "url": "https://github.com/scrapcupcake/hexs6/issues"
+    },
+    "homepage": "https://github.com/scrapcupcake/hexs6/"
 }

@@ -89,27 +89,34 @@ describe("Hex Rotation", () => {
 });
 
 describe("Hex Directions", () => {
-    let prev_hex = hex_directions[5];
-    for(let i=0; i<5; i++){
+    let next_hex = hex_directions[5];
+    for(let i=0; i<6; i++){
         let current_hex = hex_directions[i];
-        let next_hex = i==5? hex_directions[0] : hex_direction[i+1];
+        let prev_hex = i==5 ? hex_directions[0] : hex_directions[i+1];
+        console.log(`\nLeft: ${hex_stringify(next_hex)}\nCurrent: ${hex_stringify(current_hex)} \nRight: ${hex_stringify(prev_hex)}\n`)
+        describe(`at index ${i}`, () => {
+            it(`should be rotationally correct for ${hex_stringify(next_hex)} rotates right into ${hex_stringify(current_hex)} vs \n${hex_stringify(hex_rotate_right(next_hex))}`, ()=> {
+                expect(hex_rotate_right(next_hex)).toEqual(current_hex);
+            });
 
-        it(`should be rotationally correct for ${hex_stringify(current_hex)}`, ()=> {
-            expect(current_hex).toEqual(hex_rotate_right(next_hex));
-            expect(current_hex).toEqual(hex_rotate_left(prev_hex));
-        });
+            it(`should be rotationally correct for ${hex_stringify(prev_hex)} rotates left into \n${hex_stringify(current_hex)}\n vs \n${hex_stringify(hex_rotate_left(prev_hex))}`, ()=> {
+                expect(hex_rotate_left(prev_hex)).toEqual(current_hex);
+            });
 
-        let horizontal_name = hex_direction_names_horizontal[i];
-        it(`should match the vertical alignment ${horizontal_name}`, () => {
-            expect(hex_direction(horizontal_name)).toEqual(current_hex);
-        });
 
-        let vertical_name = hex_direction_names_vertical[i];
-        it(`should match the vertical alignment ${vertical_name}`, () => {
-            expect(hex_direction(vertical_name)).toEqual(current_hex);
-        });
+            let horizontal_name = hex_direction_names_horizontal[i];
+            it(`should match the horizontal alignment ${horizontal_name}`, () => {
+                expect(hex_direction(horizontal_name)).toEqual(current_hex);
+            });
 
-        prev_hex=current_hex;
+            let vertical_name = hex_direction_names_vertical[i];
+            it(`should match the vertical alignment ${vertical_name}`, () => {
+                expect(hex_direction(vertical_name, false)).toEqual(current_hex);
+            });
+            
+        })
+
+        next_hex=current_hex;
     }
 });
 
