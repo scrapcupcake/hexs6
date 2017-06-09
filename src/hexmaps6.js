@@ -11,8 +11,6 @@ export function string_hash_code(string){
 	return hash;
 }
 
-
-
 export function hex_hash(hex){
     return string_hash_code(hex_stringify(hex));
 }

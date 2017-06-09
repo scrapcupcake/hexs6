@@ -1,6 +1,6 @@
 {
     "name": "hexs6",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "# Hexs6 A hex maths library, inspired by [Red Blob Game's excellent articles](http://www.redblobgames.com/grids/hexagons/). Written for use with ES6 and Typescript, everything has been kept functional.",
     "scripts": {
         "test": "ts-node --lib dom,es2015 node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json",
