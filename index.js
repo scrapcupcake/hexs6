@@ -30,5 +30,11 @@ export {EVEN,
 export { create_hex_cells, 
     hexmap_wraparound_neighbors, 
     wraparound_mirror_centers, 
-    wraparound_bounds } 
+    wraparound_bounds,
+    hex_array_to_map_reducer,
+    hex_hash,
+    store_hex,
+    get_hex,
+    hexmap_values,
+    hexmap_neighbors } 
 from './src/hexmaps6';
