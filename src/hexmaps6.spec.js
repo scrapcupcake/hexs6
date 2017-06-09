@@ -18,9 +18,10 @@ describe("Hexmap", () => {
     describe("should generate the correct number of tiles for", () => {
         it("a radius of 0", () => { expect(create_hex_cells(0).length).toEqual(1) });
         it("a radius of 1", () => { 
-            let cells = create_hex_cells(1); 
-            console.log(cells);
-            expect(cells.length).toEqual(7);
+            expect(create_hex_cells(1).length).toEqual(7);
+        });
+        it("a string radius of '1'", () => { 
+            expect(create_hex_cells("1").length).toEqual(7);
         });
         it("a radius of 2", () => { expect(create_hex_cells(2).length).toEqual(19) });
     })

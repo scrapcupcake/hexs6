@@ -50,56 +50,36 @@ describe("Hex Rotation", () => {
 
     describe("back and forth results in the same location", ()=>{
         it("at 2,-3, 1", ()=>{
-            let rot = Hex(2,-3,1);
+            let rot = Hex(2,1,-3);
             expect(rot).toEqual(hex_rotate_right(hex_rotate_left(rot)));
         });
-        it("at -4,5,-1", ()=>{
+        it("at -4, 5, -1", ()=>{
             let rot = Hex(-4,5,-1);
             expect(rot).toEqual(hex_rotate_right(hex_rotate_left(rot)));
         });    
     });
-
-    describe("at radius 3", () => {
-        let rotation_target = Hex(2,-4,2);
-        let rotated_right = Hex(4,-2,-2);
-        let rotated_left = Hex(-2,-2, 4);
-
-        it("should rotate right correctly", () => {
-            expect(rotated_right).toEqual(hex_rotate_right(rotation_target));
-        });
-        it("should rotate left correctly", () => {
-            expect(rotated_left).toEqual(hex_rotate_left(rotation_target));
-        });
-            
-    });
-
-    describe("at radius 5", () => {
-        let rotation_target = Hex(-5,1,4);
-        let rotated_right = Hex(-1,-4,5);
-        let rotated_left = Hex(-4,5,-1);
-
-        it("should rotate right correctly", () => {
-            expect(rotated_right).toEqual(hex_rotate_right(rotation_target));
-        });
-        it("should rotate left correctly", () => {
-            expect(rotated_left).toEqual(hex_rotate_left(rotation_target));
-        });
-            
-    });
 });
 
+function next_direction(index){
+    return index==5 ? 0 : index+1;
+}
+
+function prev_direction(index){
+    return index==0 ? 5 : index-1;
+}
+
 describe("Hex Directions", () => {
-    let next_hex = hex_directions[5];
     for(let i=0; i<6; i++){
+        let prev_hex = hex_directions[prev_direction(i)];
         let current_hex = hex_directions[i];
-        let prev_hex = i==5 ? hex_directions[0] : hex_directions[i+1];
+        let next_hex = hex_directions[next_direction(i)];
         //console.log(`\nLeft: ${hex_stringify(next_hex)}\nCurrent: ${hex_stringify(current_hex)} \nRight: ${hex_stringify(prev_hex)}\n`)
-        describe(`at index ${i}`, () => {
-            it(`should be rotationally correct for ${hex_stringify(next_hex)} rotates right into ${hex_stringify(current_hex)} vs \n${hex_stringify(hex_rotate_right(next_hex))}`, ()=> {
+        describe(`at index ${i}, in direction ${hex_direction_names_horizontal[i]}`, () => {
+            it(` ${hex_stringify(next_hex)} should rotate right into ${hex_stringify(current_hex)} vs \n${hex_stringify(hex_rotate_right(next_hex))}`, ()=> {
                 expect(hex_rotate_right(next_hex)).toEqual(current_hex);
             });
 
-            it(`should be rotationally correct for ${hex_stringify(prev_hex)} rotates left into \n${hex_stringify(current_hex)}\n vs \n${hex_stringify(hex_rotate_left(prev_hex))}`, ()=> {
+            it(`${hex_stringify(prev_hex)} should rotate left into \n${hex_stringify(current_hex)}\n vs \n${hex_stringify(hex_rotate_left(prev_hex))}`, ()=> {
                 expect(hex_rotate_left(prev_hex)).toEqual(current_hex);
             });
 
@@ -114,9 +94,7 @@ describe("Hex Directions", () => {
                 expect(hex_direction(vertical_name, false)).toEqual(current_hex);
             });
             
-        })
-
-        next_hex=current_hex;
+        });
     }
 });
 

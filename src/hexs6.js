@@ -85,17 +85,17 @@ export function hex_scale(a, k) {
 
 
 export const hex_directions = [Hex(1, 0, -1), Hex(0, 1, -1), Hex(-1, 1, 0), Hex(-1, 0, 1), Hex(0, -1, 1), Hex(1, -1, 0)];
-export const hex_direction_names_horizontal = ["East", "SouthEast", "SouthWest", "West", "NorthWest", "NorthEast"];
+export const hex_direction_names_horizontal = ["East",  "NorthEast", "NorthWest", "West",  "SouthWest", "SouthEast"];
 const normalized_horizontal_names = hex_direction_names_horizontal.map((d) => d.toLowerCase());
-export const hex_direction_names_vertical = ["SouthEast", "South", "SouthWest", "NorthWest", "North", "NorthEast"];
+export const hex_direction_names_vertical = ["NorthEast", "North", "NorthWest", "SouthWest", "South", "SouthEast"];
 const normalized_vertical_names = hex_direction_names_vertical.map((d) => d.toLowerCase());
 
 /**
  * Resolve hex directions consistently, either by integer index or name string.
  * Names default to Horizontal aka Pointy Top orientation
  * Index Order: [Hex(1, 0, -1), Hex(0, 1, -1), Hex(-1, 1, 0), Hex(-1,0,1),Hex(0,-1,1),Hex(1,-1,-0)];
- * Horizontal:  ["East",       "SouthEast",    "SouthWest",   "West",     "NorthWest",   "NorthEast"  ]
- * Vertical:    ["SouthEast",  "NorthEast",   "North",   "NorthWest",        "SouthWest",   "South"  ]
+ * Horizontal:  ["East",  "NorthEast", "NorthWest", "West",  "SouthEast", "SouthWest"]
+ * Vertical:    ["NorthEast", "North", "NorthWest", "SouthWest", "South", "SouthEast"]
  * TODO: Case insensitivity
  * @param direction String or Index
  * @param horizontal Boolean, false uses vertical names
@@ -114,18 +114,26 @@ export function hex_direction(direction, horizontal = true) {
     return hex_directions[direction];
 }
 
-/*       [ x=q,  y=r,  z=s]
-to        [-y=r, -z=s, -x=q]
+
+/*
+[ x=q,  y=r,  z=s]
+to        [-r, -s, -q]
  */
 export function hex_rotate_left(rotation_origin, center = Hex(0, 0, 0)) {
     let vector = hex_subtract(rotation_origin, center);
-    let rotated = Hex(-vector.s * 1, -vector.q * 1, -vector.r * 1);
+    let rotated = Hex(-vector.r * 1, -vector.s * 1, -vector.q * 1);
     return hex_add(rotated, center);
 }
 
+/*       [ x=q,  y=r,  z=s]
+to        [-y=-r, -z=-s, -x=-q]
+
+[ x,  y,  z]
+to  [-z, -x, -y]
+ */
 export function hex_rotate_right(rotation_origin, center = Hex(0, 0, 0)) {
     let vector = hex_subtract(rotation_origin, center);
-    let rotated = Hex(-vector.r * 1, -vector.s * 1, -vector.q * 1);
+    let rotated = Hex(-vector.s * 1, -vector.q * 1, -vector.r * 1);
     return hex_add(rotated, center);
 }
 
