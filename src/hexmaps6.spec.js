@@ -15,7 +15,7 @@ import {
 
 describe("Hexmap", () => {
 
-    fdescribe("should generate the correct number of tiles for", () => {
+    describe("should generate the correct number of tiles for", () => {
         it("a radius of 0", () => { expect(create_hex_cells(0).length).toEqual(1) });
         it("a radius of 1", () => { 
             let cells = create_hex_cells(1); 

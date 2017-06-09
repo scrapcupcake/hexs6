@@ -39,13 +39,17 @@ export function hex_array_to_map_reducer(map, currentArrayItem){
 }
 
 export function create_hex_cells(radius){
+        radius = parseInt(radius);
         let map = new Array();
+        console.warn("Creating hex array with radius",radius);
         for(let q = -radius; q <= radius; q++){
             let start = Math.max(-radius, -q - radius);
             let end = Math.min(radius, -q + radius);
+            console.log("Start and End?", start, end);
 
             for(let r = start; r <= end; r++){
                 let hex = Hex(q,r,-q-r);
+                console.log("Created Hex:",hex);
                 map.push(hex);
             }
         }

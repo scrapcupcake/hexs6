@@ -93,7 +93,7 @@ describe("Hex Directions", () => {
     for(let i=0; i<6; i++){
         let current_hex = hex_directions[i];
         let prev_hex = i==5 ? hex_directions[0] : hex_directions[i+1];
-        console.log(`\nLeft: ${hex_stringify(next_hex)}\nCurrent: ${hex_stringify(current_hex)} \nRight: ${hex_stringify(prev_hex)}\n`)
+        //console.log(`\nLeft: ${hex_stringify(next_hex)}\nCurrent: ${hex_stringify(current_hex)} \nRight: ${hex_stringify(prev_hex)}\n`)
         describe(`at index ${i}`, () => {
             it(`should be rotationally correct for ${hex_stringify(next_hex)} rotates right into ${hex_stringify(current_hex)} vs \n${hex_stringify(hex_rotate_right(next_hex))}`, ()=> {
                 expect(hex_rotate_right(next_hex)).toEqual(current_hex);
