@@ -3,7 +3,8 @@
     "version": "0.0.5",
     "description": "# Hexs6 A hex maths library, inspired by [Red Blob Game's excellent articles](http://www.redblobgames.com/grids/hexagons/). Written for use with ES6 and Typescript, everything has been kept functional.",
     "scripts": {
-        "test": "ts-node --lib dom,es2015 node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json"
+        "test": "ts-node --lib dom,es2015 node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json",
+        "test2": "ts-node --lib dom,es2015 node_modules/.bin/karma"
     },
     "repository": {
         "type": "git",
@@ -25,9 +26,12 @@
         "karma": "^1.7.0",
         "karma-babel-preprocessor": "^6.0.1",
         "karma-chrome-launcher": "^2.1.1",
+        "karma-edge-launcher": "^0.4.1",
+        "karma-firefox-launcher": "^1.0.1",
         "karma-jasmine": "^1.1.0",
         "karma-jasmine-html-reporter": "^0.2.2",
         "karma-typescript": "^3.0.2",
+        "karma-typescript-es6-transform": "^1.0.1",
         "ts-node": "~1.6.0",
         "typescript": "^2.3.2"
     },

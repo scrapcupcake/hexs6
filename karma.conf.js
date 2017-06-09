@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Thu May 18 2017 10:44:42 GMT-0700 (Pacific Daylight Time)
 
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -22,6 +22,11 @@ module.exports = function(config) {
             },
             lib: ["es2015", "es2017", "dom"], // fix for "'Promise' only refers to a type"
             tsconfig: "./tsconfig.json",
+            bundlerOptions: {
+                transforms: [
+                    require("karma-typescript-es6-transform")()
+                ]
+            }
         },
 
 
@@ -70,7 +75,7 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+        browsers: ['Edge', 'Firefox', 'FirefoxDeveloper'],
 
 
         // Continuous Integration mode
