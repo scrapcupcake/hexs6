@@ -99,10 +99,14 @@ describe("Hex Directions", () => {
 });
 
 describe("Hex Neighbors", () => {
-    it("should have the expected neighbor", () => {
-         expect(Hex(1, -3, 2)).toEqual(hex_neighbor(Hex(1, -2, 1), 2));
-         expect(Hex(1, 1, 2)).toEqual(hex_neighbor(Hex(1, 2, 1), 2));
-    })
+    it("should have the expected neighbor for origin", () => {
+         expect(Hex(1, 0, -1)).toEqual(hex_neighbor(Hex(0,0,0),0));
+    });
+    it("should have the expected neighbor for Hex(1,-2,1) toward the northwest, Hex(1,-3,2)", () => {
+         expect(Hex(0,-2,2)).toEqual(hex_neighbor(Hex(1,-3,2), "NorthWest"));
+    });
+
+
 });
 
 describe("Hex Diagonal", () => {
