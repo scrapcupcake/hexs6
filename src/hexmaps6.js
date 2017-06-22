@@ -63,7 +63,7 @@ export function wraparound_mirror_centers(radius,origin=Hex(0,0,0)){
 }
 
 //Busted do not use
-export function wraparound_bounds(position,radius,centers){
+export function wraparound_bounds(position,radius,centers=wraparound_mirror_centers(radius)){
     //console.log("Running with Center on POS:",centers, position);
     //console.log("Wtf are you radius?", radius);
     for(let offset of centers){
