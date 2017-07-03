@@ -26,7 +26,7 @@ export {EVEN,
     hex_directions,
     hex_stringify,
     hex_direction_names_horizontal,
-    hex_direction_names_vertical } from './src/hexs6';
+    hex_direction_names_vertical } from './hexs6';
 export { create_hex_cells, 
     hexmap_wraparound_neighbors, 
     wraparound_mirror_centers, 
@@ -37,4 +37,4 @@ export { create_hex_cells,
     get_hex,
     hexmap_values,
     hexmap_neighbors } 
-from './src/hexmaps6';
+from './hexmaps6';
