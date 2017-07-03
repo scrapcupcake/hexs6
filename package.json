@@ -1,5 +1,5 @@
 {
-  "private": true,
+  "private": false,
   "name": "hexs6",
   "version": "0.0.0",
   "description": "Hexs6: A hex maths library, inspired by [Red Blob Game's excellent articles](http://www.redblobgames.com/grids/hexagons/). Written in a functional style ES6, transpiled to be useable everywhere.",
