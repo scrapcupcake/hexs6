@@ -38,6 +38,11 @@ export function hex_array_to_map_reducer(map, currentArrayItem){
     return map;
 }
 
+export function map_size(radius){
+    radius = parseInt(radius);
+    return radius == 0 ? 1 : 6*radius + map_size(radius-1);
+}
+
 export function create_hex_cells(radius){
         radius = parseInt(radius);
         let map = new Array();

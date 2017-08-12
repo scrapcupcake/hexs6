@@ -10,7 +10,8 @@ import {
 } from '../src/hexs6';
 import {
     create_hex_cells, hexmap_wraparound_neighbors,
-    wraparound_mirror_centers, wraparound_bounds
+    wraparound_mirror_centers, wraparound_bounds,
+    map_size
 } from '../src/hexmaps6';
 
 import { expect } from 'chai';
@@ -27,7 +28,16 @@ describe("Hexmap", () => {
             expect(create_hex_cells("1").length).to.deep.equal(7);
         });
         it("a radius of 2", () => { expect(create_hex_cells(2).length).to.deep.equal(19) });
-    })
+    });
+
+    describe("should have a consistent size between map_size and create_hex_cells", () => {
+        [2,4,10,50].forEach((radius) => {
+            let expected_map_size = map_size(radius);
+            it(`for radius ${radius} should be size ${expected_map_size}`, () => {
+                expect(create_hex_cells(radius).length).to.deep.eq(expected_map_size);
+            })
+        })
+    });
 
     let mapRadius = 4;
     let centerHex = Hex(0, 0, 0);
