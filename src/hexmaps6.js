@@ -74,21 +74,17 @@ export function wraparound_mirror_centers(radius,origin=Hex(0,0,0)){
     return offsets;
 }
 
-//Busted do not use
+//Oh, right! Fixed! Please use!
 export function wraparound_bounds(position,radius,centers=wraparound_mirror_centers(radius)){
-    //console.log("Running with Center on POS:",centers, position);
-    //console.log("Wtf are you radius?", radius);
     for(let offset of centers){
         let distance = hex_distance(position, offset);
         let check = distance <= radius;
-        //console.log(`For offset, distance is ${distance} hexes`,position,offset);
         if(check){
             return hex_subtract(position,  offset);
         }
     }
-    console.log("\nUnable to find any center we're less than a radius away from?!\n");
+    console.error("\nUnable to find any center we're less than a radius away from?!\nPlease check your passed in centers.");
     return undefined;
-
 }
 
 export function hexmap_wraparound_neighbors(hex,map, mirrors){
