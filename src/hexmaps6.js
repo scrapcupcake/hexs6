@@ -43,17 +43,24 @@ export function map_size(radius){
     return radius == 0 ? 1 : 6*radius + map_size(radius-1);
 }
 
-export function create_hex_cells(radius){
-        radius = parseInt(radius);
-        let map = new Array();
-        for(let q = -radius; q <= radius; q++){
-            let start = Math.max(-radius, -q - radius);
-            let end = Math.min(radius, -q + radius);
+export function* traverse_hex_cells(radius){
+    radius = parseInt(radius);
+    for(let q = -radius; q <= radius; q++){
+        let start = Math.max(-radius, -q - radius);
+        let end = Math.min(radius, -q + radius);
 
-            for(let r = start; r <= end; r++){
-                let hex = Hex(q,r,-q-r);
-                map.push(hex);
-            }
+        for(let r = start; r <= end; r++){
+            let hex = Hex(q,r,-q-r);
+            yield hex;
+        }
+    }
+}
+
+export function create_hex_cells(radius){
+        let map = new Array();
+        for(let pos of traverse_hex_cells(radius))
+        {
+            map.push(pos);
         }
         return map;
 }
