@@ -30,8 +30,6 @@ import {
     hex_direction_names_vertical
 } from '../src/hexs6';
 
-import { expect } from 'chai';
-
 /**
  * Hexs6 Tests
  * 

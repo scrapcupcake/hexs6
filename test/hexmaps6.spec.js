@@ -14,8 +14,6 @@ import {
     map_size
 } from '../src/hexmaps6';
 
-import { expect } from 'chai';
-
 
 describe("Hexmap", () => {
 
