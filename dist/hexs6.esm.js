@@ -1,13 +1,4 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('babel-runtime/core-js/math/trunc'), require('babel-runtime/helpers/typeof'), require('babel-runtime/core-js/get-iterator'), require('babel-runtime/core-js/object/keys')) :
-    typeof define === 'function' && define.amd ? define(['exports', 'babel-runtime/core-js/math/trunc', 'babel-runtime/helpers/typeof', 'babel-runtime/core-js/get-iterator', 'babel-runtime/core-js/object/keys'], factory) :
-    (factory((global.hexs6 = global.hexs6 || {}),global._Math$trunc,global._typeof,global._getIterator,global._Object$keys));
-}(this, (function (exports,_Math$trunc,_typeof,_getIterator,_Object$keys) { 'use strict';
-
-_Math$trunc = 'default' in _Math$trunc ? _Math$trunc['default'] : _Math$trunc;
-_typeof = 'default' in _typeof ? _typeof['default'] : _typeof;
-_getIterator = 'default' in _getIterator ? _getIterator['default'] : _getIterator;
-_Object$keys = 'default' in _Object$keys ? _Object$keys['default'] : _Object$keys;
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /**
  * Hexs6
@@ -167,7 +158,7 @@ function hex_diagonal_neighbor(hex, direction) {
 }
 
 function hex_length(hex) {
-    return _Math$trunc((Math.abs(hex.q) + Math.abs(hex.r) + Math.abs(hex.s)) / 2);
+    return Math.trunc((Math.abs(hex.q) + Math.abs(hex.r) + Math.abs(hex.s)) / 2);
 }
 
 function hex_distance(a, b) {
@@ -175,9 +166,9 @@ function hex_distance(a, b) {
 }
 
 function hex_round(h) {
-    var q = _Math$trunc(Math.round(h.q));
-    var r = _Math$trunc(Math.round(h.r));
-    var s = _Math$trunc(Math.round(h.s));
+    var q = Math.trunc(Math.round(h.q));
+    var r = Math.trunc(Math.round(h.r));
+    var s = Math.trunc(Math.round(h.s));
     var q_diff = Math.abs(q - h.q);
     var r_diff = Math.abs(r - h.r);
     var s_diff = Math.abs(s - h.s);
@@ -216,25 +207,25 @@ var EVEN = 1;
 var ODD = -1;
 function qoffset_from_cube(offset, h) {
     var col = h.q;
-    var row = h.r + _Math$trunc((h.q + offset * (h.q & 1)) / 2);
+    var row = h.r + Math.trunc((h.q + offset * (h.q & 1)) / 2);
     return OffsetCoord(col, row);
 }
 
 function qoffset_to_cube(offset, h) {
     var q = h.col;
-    var r = h.row - _Math$trunc((h.col + offset * (h.col & 1)) / 2);
+    var r = h.row - Math.trunc((h.col + offset * (h.col & 1)) / 2);
     var s = -q - r;
     return Hex(q, r, s);
 }
 
 function roffset_from_cube(offset, h) {
-    var col = h.q + _Math$trunc((h.r + offset * (h.r & 1)) / 2);
+    var col = h.q + Math.trunc((h.r + offset * (h.r & 1)) / 2);
     var row = h.r;
     return OffsetCoord(col, row);
 }
 
 function roffset_to_cube(offset, h) {
-    var q = h.col - _Math$trunc((h.row + offset * (h.row & 1)) / 2);
+    var q = h.col - Math.trunc((h.row + offset * (h.row & 1)) / 2);
     var r = h.row;
     var s = -q - r;
     return Hex(q, r, s);
@@ -275,6 +266,8 @@ function pixel_to_hex(layout, p) {
     return Hex(q, r, -q - r);
 }
 
+var _marked = /*#__PURE__*/regeneratorRuntime.mark(traverse_hex_cells);
+
 function string_hash_code(string) {
     var hash = 0;
     if (string.length == 0) return hash;
@@ -299,7 +292,7 @@ function get_hex(hex, map) {
 }
 
 function hexmap_values(hexmap) {
-    return _Object$keys(hexmap).map(function (k) {
+    return Object.keys(hexmap).map(function (k) {
         return hexmap[k];
     });
 }
@@ -317,52 +310,66 @@ function hex_array_to_map_reducer(map, currentArrayItem) {
     return map;
 }
 
-function create_hex_cells(radius) {
-    radius = parseInt(radius);
-    var map = new Array();
-    for (var q = -radius; q <= radius; q++) {
-        var start = Math.max(-radius, -q - radius);
-        var end = Math.min(radius, -q + radius);
 
-        for (var r = start; r <= end; r++) {
-            var hex = Hex(q, r, -q - r);
-            map.push(hex);
+
+function traverse_hex_cells(radius) {
+    var q, start, end, r, hex;
+    return regeneratorRuntime.wrap(function traverse_hex_cells$(_context) {
+        while (1) {
+            switch (_context.prev = _context.next) {
+                case 0:
+                    radius = parseInt(radius);
+                    q = -radius;
+
+                case 2:
+                    if (!(q <= radius)) {
+                        _context.next = 16;
+                        break;
+                    }
+
+                    start = Math.max(-radius, -q - radius);
+                    end = Math.min(radius, -q + radius);
+                    r = start;
+
+                case 6:
+                    if (!(r <= end)) {
+                        _context.next = 13;
+                        break;
+                    }
+
+                    hex = Hex(q, r, -q - r);
+                    _context.next = 10;
+                    return hex;
+
+                case 10:
+                    r++;
+                    _context.next = 6;
+                    break;
+
+                case 13:
+                    q++;
+                    _context.next = 2;
+                    break;
+
+                case 16:
+                case "end":
+                    return _context.stop();
+            }
         }
-    }
-    return map;
+    }, _marked, this);
 }
 
-function wraparound_mirror_centers(radius) {
-    var origin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Hex(0, 0, 0);
-
-    var offsets = [origin, hex_add(origin, Hex(2 * radius + 1, -radius, -radius - 1))];
-    while (offsets.length < 7) {
-        var prev = offsets[offsets.length - 1];
-        offsets.push(hex_rotate_right(prev));
-    }
-    return offsets;
-}
-
-//Busted do not use
-function wraparound_bounds(position, radius) {
-    var centers = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : wraparound_mirror_centers(radius);
-
-    //console.log("Running with Center on POS:",centers, position);
-    //console.log("Wtf are you radius?", radius);
+function create_hex_cells(radius) {
+    var map = new Array();
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
 
     try {
-        for (var _iterator = _getIterator(centers), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var offset = _step.value;
+        for (var _iterator = traverse_hex_cells(radius)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var pos = _step.value;
 
-            var distance = hex_distance(position, offset);
-            var check = distance <= radius;
-            //console.log(`For offset, distance is ${distance} hexes`,position,offset);
-            if (check) {
-                return hex_subtract(position, offset);
-            }
+            map.push(pos);
         }
     } catch (err) {
         _didIteratorError = true;
@@ -379,7 +386,55 @@ function wraparound_bounds(position, radius) {
         }
     }
 
-    console.log("\nUnable to find any center we're less than a radius away from?!\n");
+    return map;
+}
+
+
+
+function wraparound_mirror_centers(radius) {
+    var origin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Hex(0, 0, 0);
+
+    var offsets = [origin, hex_add(origin, Hex(2 * radius + 1, -radius, -radius - 1))];
+    while (offsets.length < 7) {
+        var prev = offsets[offsets.length - 1];
+        offsets.push(hex_rotate_right(prev));
+    }
+    return offsets;
+}
+
+//Oh, right! Fixed! Please use!
+function wraparound_bounds(position, radius) {
+    var centers = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : wraparound_mirror_centers(radius);
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+        for (var _iterator2 = centers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var offset = _step2.value;
+
+            var distance = hex_distance(position, offset);
+            var check = distance <= radius;
+            if (check) {
+                return hex_subtract(position, offset);
+            }
+        }
+    } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+            }
+        } finally {
+            if (_didIteratorError2) {
+                throw _iteratorError2;
+            }
+        }
+    }
+
+    console.error("\nUnable to find any center we're less than a radius away from?!\nPlease check your passed in centers.");
     return undefined;
 }
 
@@ -395,47 +450,4 @@ function hexmap_wraparound_neighbors(hex, map, mirrors) {
     });
 }
 
-exports.EVEN = EVEN;
-exports.Hex = Hex;
-exports.hex_add = hex_add;
-exports.hex_diagonal_neighbor = hex_diagonal_neighbor;
-exports.hex_direction = hex_direction;
-exports.hex_distance = hex_distance;
-exports.hex_lerp = hex_lerp;
-exports.hex_linedraw = hex_linedraw;
-exports.hex_neighbor = hex_neighbor;
-exports.hex_round = hex_round;
-exports.hex_subtract = hex_subtract;
-exports.hex_rotate_left = hex_rotate_left;
-exports.hex_rotate_right = hex_rotate_right;
-exports.hex_to_pixel = hex_to_pixel;
-exports.Layout = Layout;
-exports.layout_flat = layout_flat;
-exports.layout_pointy = layout_pointy;
-exports.ODD = ODD;
-exports.OffsetCoord = OffsetCoord;
-exports.pixel_to_hex = pixel_to_hex;
-exports.Point = Point;
-exports.qoffset_from_cube = qoffset_from_cube;
-exports.qoffset_to_cube = qoffset_to_cube;
-exports.roffset_from_cube = roffset_from_cube;
-exports.roffset_to_cube = roffset_to_cube;
-exports.hex_directions = hex_directions;
-exports.hex_stringify = hex_stringify;
-exports.hex_direction_names_horizontal = hex_direction_names_horizontal;
-exports.hex_direction_names_vertical = hex_direction_names_vertical;
-exports.create_hex_cells = create_hex_cells;
-exports.hexmap_wraparound_neighbors = hexmap_wraparound_neighbors;
-exports.wraparound_mirror_centers = wraparound_mirror_centers;
-exports.wraparound_bounds = wraparound_bounds;
-exports.hex_array_to_map_reducer = hex_array_to_map_reducer;
-exports.hex_hash = hex_hash;
-exports.store_hex = store_hex;
-exports.get_hex = get_hex;
-exports.hexmap_values = hexmap_values;
-exports.hexmap_neighbors = hexmap_neighbors;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
-//# sourceMappingURL=index.umd.js.map
+export { EVEN, Hex, hex_add, hex_diagonal_neighbor, hex_direction, hex_distance, hex_lerp, hex_linedraw, hex_neighbor, hex_round, hex_subtract, hex_rotate_left, hex_rotate_right, hex_to_pixel, Layout, layout_flat, layout_pointy, ODD, OffsetCoord, pixel_to_hex, Point, qoffset_from_cube, qoffset_to_cube, roffset_from_cube, roffset_to_cube, hex_directions, hex_stringify, hex_direction_names_horizontal, hex_direction_names_vertical, create_hex_cells, hexmap_wraparound_neighbors, wraparound_mirror_centers, wraparound_bounds, hex_array_to_map_reducer, hex_hash, store_hex, get_hex, hexmap_values, hexmap_neighbors };

@@ -1,8 +1,3 @@
-# Include your project-specific ignores in this file
-# Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
-
-coverage
-# dist # Nope, not while NPM publish is down
-docs/dist
+.DS_Store
 node_modules
-npm-debug.log
+package-lock.json

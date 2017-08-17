@@ -69,7 +69,7 @@ describe("Hexmap", () => {
             });
         });
 
-        /*
+        //TODO: FIX THIS TEST
         describe("for a radius 1 map", () => {
             it("should return you to the bottom left when you walk off the top right", () => {
                 let topHex = Hex(0,-1,1);
@@ -90,6 +90,6 @@ describe("Hexmap", () => {
             it("should return you to the left when you walk off the right", () => {
 
             });
-        });*/
+        });
     });
 });

@@ -65,6 +65,19 @@ export function create_hex_cells(radius){
         return map;
 }
 
+export function add_hex_pos_to(array_of_objects, radius){
+    let pos = create_hex_cells(radius);
+    if(pos.length != array_of_objects.length){
+        console.warn(
+            "Adding positions to array of unequal length; is your data correct?",
+             pos, array_of_objects);
+    }
+    return Array.from(array_of_objects).map((target,ordinal) => {
+        //TODO: possibly do conversion of non-objects into objects with a {value: target}?
+        return {...target, pos: pos[ordinal]};
+    });
+}
+
 export function wraparound_mirror_centers(radius,origin=Hex(0,0,0)){
     let offsets = [origin, hex_add(origin,Hex(2*radius+1, -radius, -radius-1)) ];
     while(offsets.length < 7){
