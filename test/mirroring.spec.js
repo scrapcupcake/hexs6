@@ -35,8 +35,10 @@ import {
     describe("A radius 1 map", () => {
             describe("should return undefined when you're way far off the map", () => {
                 let farHex = Hex(0,-10,10);
+                global.console = {warn: jest.fn()}
                 expect(wraparound_bounds(farHex,1)).toBe(undefined);
-            })
+                expect(console.warn).toBeCalled();
+            });
             
             describe("should return you to the southwest when you walk off the northeast", () => {
                 let northeast = Hex(1,-1,0);

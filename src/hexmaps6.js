@@ -44,6 +44,6 @@ export function wraparound_bounds(position,radius,centers=wraparound_mirror_cent
             return hex_subtract(position,  offset);
         }
     }
-    console.error("\nUnable to find any center we're less than a radius away from?!\nPlease check your passed in centers.",position,radius,centers);
+    console.warn("\nUnable to find any center we're less than a radius away from?!\nPlease check your passed in centers.",position,radius,centers);
     return undefined;
 }
