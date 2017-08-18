@@ -61,9 +61,9 @@ const normalized_vertical_names = hex_direction_names_vertical.map((d) => d.toLo
  * Resolve hex directions consistently, either by integer index or name string.
  * Names default to Horizontal aka Pointy Top orientation
  * Index Order: [Hex(1, 0, -1), Hex(0, 1, -1), Hex(-1, 1, 0), Hex(-1,0,1),Hex(0,-1,1),Hex(1,-1,-0)];
- * Horizontal:  ["East",  "NorthEast", "NorthWest", "West",  "SouthEast", "SouthWest"]
- * Vertical:    ["NorthEast", "North", "NorthWest", "SouthWest", "South", "SouthEast"]
- * TODO: Case insensitivity
+ * Horizontal:  ["East",  "SouthEast", "SouthWest", "West",  "NorthWest", "NorthEast"]
+ * Vertical:    ["NorthEast", "SouthEast", "South", "SouthWest", "NorthWest", "North"]
+ * 
  * @param direction String or Index
  * @param horizontal Boolean, false uses vertical names
  */

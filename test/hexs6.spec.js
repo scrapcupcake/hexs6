@@ -16,7 +16,7 @@ import {
     hex_stringify,
     hex_direction_names_horizontal,
     hex_direction_names_vertical
-} from '../src/hexs6';
+} from '../src/index';
 
 /**
  * Hexs6 Tests
