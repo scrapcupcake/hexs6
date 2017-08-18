@@ -7,16 +7,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  */
 
 /**
- * Simple named generator for an {x,y}
- * Useful for making code more self-documenting
- * @param x 
- * @param y 
- */
-function Point(x, y) {
-    return { x: x, y: y };
-}
-
-/**
  * Named generator for the expected hex javascript object, which holds a hex's co-ors in cubed format
  * These serve as both coordinate and vector in the hex plane, allowing them to be scaled, etc
  * @param q 
@@ -34,17 +24,6 @@ function Hex(q, r, s) {
 function hex_stringify(hex) {
     return "q:" + hex.q + "|r:" + hex.r + "|s:" + hex.s;
 }
-
-/**
- * Named Generator for an Axial coordinate, just another name for Point at the end of the day, but self-documenting code, yo
- * @param x 
- * @param z 
- */
-
-
-
-
-
 
 /**
  * Hex Coordinate system addition
@@ -72,11 +51,11 @@ function hex_subtract(a, b) {
 
 
 var hex_directions = [Hex(1, 0, -1), Hex(0, 1, -1), Hex(-1, 1, 0), Hex(-1, 0, 1), Hex(0, -1, 1), Hex(1, -1, 0)];
-var hex_direction_names_horizontal = ["East", "NorthEast", "NorthWest", "West", "SouthWest", "SouthEast"];
+var hex_direction_names_horizontal = ["East", "SouthEast", "SouthWest", "West", "NorthWest", "NorthEast"];
 var normalized_horizontal_names = hex_direction_names_horizontal.map(function (d) {
     return d.toLowerCase();
 });
-var hex_direction_names_vertical = ["NorthEast", "North", "NorthWest", "SouthWest", "South", "SouthEast"];
+var hex_direction_names_vertical = ["NorthEast", "SouthEast", "South", "SouthWest", "NorthWest", "North"];
 var normalized_vertical_names = hex_direction_names_vertical.map(function (d) {
     return d.toLowerCase();
 });
@@ -139,7 +118,9 @@ function hex_rotate_right(rotation_origin) {
  * @param direction 
  */
 function hex_neighbor(hex, direction) {
-    return hex_add(hex, hex_direction(direction));
+    var horizontal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
+    return hex_add(hex, hex_direction(direction, horizontal));
 }
 
 /**
@@ -199,116 +180,7 @@ function hex_linedraw(a, b) {
     return results;
 }
 
-function OffsetCoord(col, row) {
-    return { col: col, row: row };
-}
-
-var EVEN = 1;
-var ODD = -1;
-function qoffset_from_cube(offset, h) {
-    var col = h.q;
-    var row = h.r + Math.trunc((h.q + offset * (h.q & 1)) / 2);
-    return OffsetCoord(col, row);
-}
-
-function qoffset_to_cube(offset, h) {
-    var q = h.col;
-    var r = h.row - Math.trunc((h.col + offset * (h.col & 1)) / 2);
-    var s = -q - r;
-    return Hex(q, r, s);
-}
-
-function roffset_from_cube(offset, h) {
-    var col = h.q + Math.trunc((h.r + offset * (h.r & 1)) / 2);
-    var row = h.r;
-    return OffsetCoord(col, row);
-}
-
-function roffset_to_cube(offset, h) {
-    var q = h.col - Math.trunc((h.row + offset * (h.row & 1)) / 2);
-    var r = h.row;
-    var s = -q - r;
-    return Hex(q, r, s);
-}
-
-function Orientation(f0, f1, f2, f3, b0, b1, b2, b3, start_angle) {
-    return { f0: f0, f1: f1, f2: f2, f3: f3, b0: b0, b1: b1, b2: b2, b3: b3, start_angle: start_angle };
-}
-
-/**
- * TODO: Docs
- * @param orientation 
- * @param size 
- * @param origin 
- */
-function Layout(orientation, size, origin) {
-    return { orientation: orientation, size: size, origin: origin };
-}
-
-var layout_pointy = Orientation(Math.sqrt(3.0), Math.sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0, Math.sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0, 0.5);
-var layout_flat = Orientation(3.0 / 2.0, 0.0, Math.sqrt(3.0) / 2.0, Math.sqrt(3.0), 2.0 / 3.0, 0.0, -1.0 / 3.0, Math.sqrt(3.0) / 3.0, 0.0);
-function hex_to_pixel(layout, h) {
-    var M = layout.orientation;
-    var size = layout.size;
-    var origin = layout.origin;
-    var x = (M.f0 * h.q + M.f1 * h.r) * size.x;
-    var y = (M.f2 * h.q + M.f3 * h.r) * size.y;
-    return Point(x + origin.x, y + origin.y);
-}
-
-function pixel_to_hex(layout, p) {
-    var M = layout.orientation;
-    var size = layout.size;
-    var origin = layout.origin;
-    var pt = Point((p.x - origin.x) / size.x, (p.y - origin.y) / size.y);
-    var q = M.b0 * pt.x + M.b1 * pt.y;
-    var r = M.b2 * pt.x + M.b3 * pt.y;
-    return Hex(q, r, -q - r);
-}
-
 var _marked = /*#__PURE__*/regeneratorRuntime.mark(traverse_hex_cells);
-
-function string_hash_code(string) {
-    var hash = 0;
-    if (string.length == 0) return hash;
-    for (var i = 0; i < string.length; i++) {
-        var char = string.charCodeAt(i);
-        hash = (hash << 5) - hash + char;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return hash;
-}
-
-function hex_hash(hex) {
-    return string_hash_code(hex_stringify(hex));
-}
-
-function store_hex(hex, map) {
-    map[hex_hash(hex)] = hex;
-}
-
-function get_hex(hex, map) {
-    return map[hex_hash(hex)];
-}
-
-function hexmap_values(hexmap) {
-    return Object.keys(hexmap).map(function (k) {
-        return hexmap[k];
-    });
-}
-
-function hexmap_neighbors(hex, map) {
-    return hex_neighbors(hex).map(function (neighborPos) {
-        return get_hex(neighborPos, map);
-    }).filter(function (n) {
-        return !!n;
-    });
-}
-
-function hex_array_to_map_reducer(map, currentArrayItem) {
-    store_hex(currentArrayItem, map);
-    return map;
-}
 
 
 
@@ -359,7 +231,7 @@ function traverse_hex_cells(radius) {
     }, _marked, this);
 }
 
-function create_hex_cells(radius) {
+function create_hex_cells$1(radius) {
     var map = new Array();
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
@@ -389,12 +261,10 @@ function create_hex_cells(radius) {
     return map;
 }
 
-
-
 function wraparound_mirror_centers(radius) {
     var origin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Hex(0, 0, 0);
 
-    var offsets = [origin, hex_add(origin, Hex(2 * radius + 1, -radius, -radius - 1))];
+    var offsets = [origin, hex_add(origin, Hex(2 * radius + 1, -(radius - 1), -(2 * radius + 1)))];
     while (offsets.length < 7) {
         var prev = offsets[offsets.length - 1];
         offsets.push(hex_rotate_right(prev));
@@ -403,7 +273,7 @@ function wraparound_mirror_centers(radius) {
 }
 
 //Oh, right! Fixed! Please use!
-function wraparound_bounds(position, radius) {
+function wraparound_bounds$1(position, radius) {
     var centers = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : wraparound_mirror_centers(radius);
     var _iteratorNormalCompletion2 = true;
     var _didIteratorError2 = false;
@@ -413,9 +283,8 @@ function wraparound_bounds(position, radius) {
         for (var _iterator2 = centers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
             var offset = _step2.value;
 
-            var distance = hex_distance(position, offset);
-            var check = distance <= radius;
-            if (check) {
+            var distance = hex_distance(position, offset);0;
+            if (radius >= distance) {
                 return hex_subtract(position, offset);
             }
         }
@@ -434,8 +303,83 @@ function wraparound_bounds(position, radius) {
         }
     }
 
-    console.error("\nUnable to find any center we're less than a radius away from?!\nPlease check your passed in centers.");
+    console.error("\nUnable to find any center we're less than a radius away from?!\nPlease check your passed in centers.", position, radius, centers);
     return undefined;
+}
+
+/**
+ * Named Generator for an Axial coordinate, just another name for Point at the end of the day, but self-documenting code, yo
+ * @param x 
+ * @param z 
+ */
+function HexAxis(q, s) {
+    return { q: q, s: s };
+}
+
+function cube_to_axial(cube) {
+    return HexAxis(cube.q, cube.s);
+}
+
+function axial_to_cube(hex) {
+    var q = hex.q;
+    var s = hex.s;
+    var r = -q - s;
+    return Hex(q, r, s);
+}
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function string_hash_code(string) {
+    var hash = 0;
+    if (string.length == 0) return hash;
+    for (var i = 0; i < string.length; i++) {
+        var char = string.charCodeAt(i);
+        hash = (hash << 5) - hash + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}
+
+function hex_hash(hex) {
+    return string_hash_code(hex_stringify(hex));
+}
+
+function store_hex(hex, map) {
+    map[hex_hash(hex)] = hex;
+}
+
+function get_hex(hex, map) {
+    return map[hex_hash(hex)];
+}
+
+function hexmap_values(hexmap) {
+    return Object.keys(hexmap).map(function (k) {
+        return hexmap[k];
+    });
+}
+
+function hexmap_neighbors(hex, map) {
+    return hex_neighbors(hex).map(function (neighborPos) {
+        return get_hex(neighborPos, map);
+    }).filter(function (n) {
+        return !!n;
+    });
+}
+
+function hex_array_to_map_reducer(map, currentArrayItem) {
+    store_hex(currentArrayItem, map);
+    return map;
+}
+
+function add_hex_pos_to(array_of_objects, radius) {
+    var pos = create_hex_cells(radius);
+    if (pos.length != array_of_objects.length) {
+        console.warn("Adding positions to array of unequal length; is your data correct?", pos, array_of_objects);
+    }
+    return Array.from(array_of_objects).map(function (target, ordinal) {
+        //TODO: possibly do conversion of non-objects into objects with a {value: target}?
+        return _extends({}, target, { pos: pos[ordinal] });
+    });
 }
 
 function hexmap_wraparound_neighbors(hex, map, mirrors) {
@@ -450,4 +394,81 @@ function hexmap_wraparound_neighbors(hex, map, mirrors) {
     });
 }
 
-export { EVEN, Hex, hex_add, hex_diagonal_neighbor, hex_direction, hex_distance, hex_lerp, hex_linedraw, hex_neighbor, hex_round, hex_subtract, hex_rotate_left, hex_rotate_right, hex_to_pixel, Layout, layout_flat, layout_pointy, ODD, OffsetCoord, pixel_to_hex, Point, qoffset_from_cube, qoffset_to_cube, roffset_from_cube, roffset_to_cube, hex_directions, hex_stringify, hex_direction_names_horizontal, hex_direction_names_vertical, create_hex_cells, hexmap_wraparound_neighbors, wraparound_mirror_centers, wraparound_bounds, hex_array_to_map_reducer, hex_hash, store_hex, get_hex, hexmap_values, hexmap_neighbors };
+function OffsetCoord(col, row) {
+    return { col: col, row: row };
+}
+
+var EVEN = 1;
+var ODD = -1;
+function qoffset_from_cube(offset, h) {
+    var col = h.q;
+    var row = h.r + Math.trunc((h.q + offset * (h.q & 1)) / 2);
+    return OffsetCoord(col, row);
+}
+
+function qoffset_to_cube(offset, h) {
+    var q = h.col;
+    var r = h.row - Math.trunc((h.col + offset * (h.col & 1)) / 2);
+    var s = -q - r;
+    return Hex(q, r, s);
+}
+
+function roffset_from_cube(offset, h) {
+    var col = h.q + Math.trunc((h.r + offset * (h.r & 1)) / 2);
+    var row = h.r;
+    return OffsetCoord(col, row);
+}
+
+function roffset_to_cube(offset, h) {
+    var q = h.col - Math.trunc((h.row + offset * (h.row & 1)) / 2);
+    var r = h.row;
+    var s = -q - r;
+    return Hex(q, r, s);
+}
+
+/**
+ * Simple named generator for an {x,y}
+ * Useful for making code more self-documenting
+ * @param x 
+ * @param y 
+ */
+function Point(x, y) {
+    return { x: x, y: y };
+}
+
+function Orientation(f0, f1, f2, f3, b0, b1, b2, b3, start_angle) {
+    return { f0: f0, f1: f1, f2: f2, f3: f3, b0: b0, b1: b1, b2: b2, b3: b3, start_angle: start_angle };
+}
+
+/**
+ * TODO: Docs
+ * @param orientation 
+ * @param size 
+ * @param origin 
+ */
+function Layout(orientation, size, origin) {
+    return { orientation: orientation, size: size, origin: origin };
+}
+
+var layout_pointy = Orientation(Math.sqrt(3.0), Math.sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0, Math.sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0, 0.5);
+var layout_flat = Orientation(3.0 / 2.0, 0.0, Math.sqrt(3.0) / 2.0, Math.sqrt(3.0), 2.0 / 3.0, 0.0, -1.0 / 3.0, Math.sqrt(3.0) / 3.0, 0.0);
+function hex_to_pixel(layout, h) {
+    var M = layout.orientation;
+    var size = layout.size;
+    var origin = layout.origin;
+    var x = (M.f0 * h.q + M.f1 * h.r) * size.x;
+    var y = (M.f2 * h.q + M.f3 * h.r) * size.y;
+    return Point(x + origin.x, y + origin.y);
+}
+
+function pixel_to_hex(layout, p) {
+    var M = layout.orientation;
+    var size = layout.size;
+    var origin = layout.origin;
+    var pt = Point((p.x - origin.x) / size.x, (p.y - origin.y) / size.y);
+    var q = M.b0 * pt.x + M.b1 * pt.y;
+    var r = M.b2 * pt.x + M.b3 * pt.y;
+    return Hex(q, r, -q - r);
+}
+
+export { Hex, hex_add, hex_direction, hex_distance, hex_lerp, hex_linedraw, hex_neighbor, hex_diagonal_neighbor, hex_round, hex_subtract, hex_rotate_left, hex_rotate_right, hex_directions, hex_stringify, hex_direction_names_horizontal, hex_direction_names_vertical, create_hex_cells$1 as create_hex_cells, wraparound_mirror_centers, wraparound_bounds$1 as wraparound_bounds, HexAxis, cube_to_axial, axial_to_cube, string_hash_code, hex_hash, store_hex, get_hex, add_hex_pos_to, hexmap_wraparound_neighbors, hexmap_values, hexmap_neighbors, hex_array_to_map_reducer, OffsetCoord, qoffset_from_cube, qoffset_to_cube, roffset_from_cube, roffset_to_cube, EVEN, ODD, pixel_to_hex, Point, hex_to_pixel, Layout, layout_flat, layout_pointy };

@@ -1,29 +1,17 @@
 import {
-    EVEN,
     Hex,
     hex_add,
-    hex_diagonal_neighbor,
+    hex_scale,
     hex_direction,
     hex_distance,
     hex_lerp,
     hex_linedraw,
     hex_neighbor,
+    hex_diagonal_neighbor,
     hex_round,
     hex_subtract,
     hex_rotate_left,
     hex_rotate_right,
-    hex_to_pixel,
-    Layout,
-    layout_flat,
-    layout_pointy,
-    ODD,
-    OffsetCoord,
-    pixel_to_hex,
-    Point,
-    qoffset_from_cube,
-    qoffset_to_cube,
-    roffset_from_cube,
-    roffset_to_cube,
     hex_directions,
     hex_stringify,
     hex_direction_names_horizontal,
@@ -36,13 +24,23 @@ import {
  */
 
 describe("Hex Arithmetic", () => {
+    it("should equate its own position", () => {
+        expect(Hex(0,0,0)).toEqual(Hex(0,0,0));
+    });
+    it("should be found in a list", () => {
+        expect([Hex(0,0,0)]).toEqual([Hex(0,0,0)]);
+    });
     it("should hex add", () => {
         expect(Hex(4, -10, 6)).toEqual(hex_add(Hex(1, -3, 2), Hex(3, -7, 4)));
     });
 
-    it("it should hex subtract", () => {
+    it("should hex subtract", () => {
         expect(Hex(-2, 4, -2)).toEqual(hex_subtract(Hex(1, -3, 2), Hex(3, -7, 4)));
     });
+
+    it("should hex scale", () => {
+        expect(hex_scale(Hex(1,-1,0), 3)).toEqual(Hex(3,-3,0));
+    })
 });
 
 describe("Hex Rotation", () => { 
@@ -98,20 +96,9 @@ describe("Hex Directions", () => {
     }
 });
 
-describe("Hex Neighbors", () => {
-    it("should have the expected neighbor for origin", () => {
-         expect(Hex(1, 0, -1)).toEqual(hex_neighbor(Hex(0,0,0),0));
-    });
-    it("should have the expected neighbor for Hex(1,-2,1) toward the northwest, Hex(1,-3,2)", () => {
-         expect(Hex(0,-2,2)).toEqual(hex_neighbor(Hex(1,-3,2), "NorthWest"));
-    });
-
-
-});
-
 describe("Hex Diagonal", () => {
-    it("should Hex(1,-2, 1) see Hex (-1, -1 ,2) to its Wast", () => {
-        expect(Hex(-1, -1, 2)).toEqual(hex_diagonal_neighbor(Hex(1, -2, 1), 3));
+    it("should Hex(0,-1,1) should have a diagonal northwest neighbor Hex(-1,-2,3)", () => {
+        expect(Hex(-1, -2, 3)).toEqual(hex_diagonal_neighbor(Hex(0, -1, 1), 2));
     });
 });
 
@@ -151,63 +138,4 @@ describe("Hex Linedraw", () => {
         //Failing because of order. Implement sort.
         expect([Hex(0, 0, 0), Hex(0, -1, 1), Hex(0, -2, 2), Hex(1, -3, 2), Hex(1, -4, 3), Hex(1, -5, 4)]).toEqual(hex_linedraw(Hex(0, 0, 0), Hex(1, -5, 4)));
     });
-});
-
-describe("Hex Layout", () => {
-    it("should calculate as expected and have a better spec name", () => {
-        var h = Hex(3, 4, -7);
-        var flat = Layout(layout_flat, Point(10, 15), Point(35, 71));
-        expect(h).toEqual(hex_round(pixel_to_hex(flat, hex_to_pixel(flat, h))));
-        var pointy = Layout(layout_pointy, Point(10, 15), Point(35, 71));
-        expect(h).toEqual(hex_round(pixel_to_hex(pointy, hex_to_pixel(pointy, h))));
-    });
-});
-
-describe("Conversion Round Trip", () => {
-        //Imports and It statements
-        var a = Hex(3, 4, -7);
-        var b = OffsetCoord(1, -3);
-        
-        it("conversion_roundtrip even-q", () => { 
-            expect(a).toEqual(qoffset_to_cube(EVEN, qoffset_from_cube(EVEN, a)));
-        });
-        it("conversion_roundtrip even-q", () => { 
-             expect(b).toEqual(qoffset_from_cube(EVEN, qoffset_to_cube(EVEN, b)));
-        });
-        it("conversion_roundtrip odd-q", () => {
-            expect(a).toEqual(qoffset_to_cube(ODD, qoffset_from_cube(ODD, a)));
-        });
-        it("conversion_roundtrip odd-q", () => {
-            expect(b).toEqual(qoffset_from_cube(ODD, qoffset_to_cube(ODD, b)));
-        });
-        it("conversion_roundtrip even-r", () => {
-            expect(a).toEqual(roffset_to_cube(EVEN, roffset_from_cube(EVEN, a)));
-        });
-        it("conversion_roundtrip even-r", () => {
-            expect(b).toEqual(roffset_from_cube(EVEN, roffset_to_cube(EVEN, b)));
-        });
-        it("conversion_roundtrip odd-r", () => {
-            expect(a).toEqual(roffset_to_cube(ODD, roffset_from_cube(ODD, a)));
-        });
-        it("conversion_roundtrip odd-r", () => {
-            expect(b).toEqual(roffset_from_cube(ODD, roffset_to_cube(ODD, b)));
-        });
-});
-
-describe("Hex Offset Coords FROM Cube", () => {
-    it("offset_from_cube even-q", () => {
-        expect(OffsetCoord(1, 3)).toEqual(qoffset_from_cube(EVEN, Hex(1, 2, -3)));
-    });
-    it("offset_from_cube odd-q", () => {
-        expect(OffsetCoord(1, 2)).toEqual(qoffset_from_cube(ODD, Hex(1, 2, -3)));
-    });
-});
-
-describe("Hex Offset Coords TO Cube", () => {
-    it("offset_to_cube even-", () =>{
-        expect(Hex(1, 2, -3)).toEqual(qoffset_to_cube(EVEN, OffsetCoord(1, 3)));
-    });
-    it("offset_to_cube odd-q", () => {
-        expect(Hex(1, 2, -3)).toEqual(qoffset_to_cube(ODD, OffsetCoord(1, 2)));
-    }); 
 });
